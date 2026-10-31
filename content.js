@@ -162,6 +162,13 @@ function updateLayerAndStyle() {
       background-color: transparent !important;
       background-image: none !important;
     }
+    /* Decorative layers inside a sticky bottom dock (ChatGPT shows a solid strip there while scrolled up) */
+    [class*="sticky"][class*="bottom-0"] [class*="pointer-events-none"][class*="background-"],
+    [class*="footer-"] > [class*="background-"][class*="surface-"] {
+      background-color: transparent !important;
+      background-image: none !important;
+      backdrop-filter: none !important;
+    }
     [data-aibg-pseudo]::before, [data-aibg-pseudo]::after {
       background: transparent !important;
       backdrop-filter: none !important;
@@ -223,9 +230,10 @@ function scan() {
   for (let i = 0; i < all.length; i++) {
     const el = all[i];
     if (seen.has(el) || el.id === LAYER_ID || el.dataset.aibgGlass || SKIP_TAGS.has(el.tagName.toUpperCase())) continue;
-    seen.add(el);
     const w = el.offsetWidth, h = el.offsetHeight;
+    // Hidden elements are not marked as seen, so they get checked once they appear
     if (!w || !h) continue;
+    seen.add(el);
     if (w < 150 && h < 150) continue;
     if (el.closest(SKIP_INSIDE)) continue;
 
@@ -254,7 +262,10 @@ function scan() {
     const composerArea = wide && !!el.querySelector(EDITABLE);
     const pinnedBar = wide && isPinned(el);
     const fx = wide && (cs.backgroundImage.includes("gradient") || hasBlurFx(cs));
-    if (big || composerArea || pinnedBar || fx) clearSurface(el, cs);
+    // Decorative backdrop layer: absolutely positioned, non-interactive, wide
+    // (e.g. ChatGPT's black strip behind the composer while scrolled up)
+    const decor = wide && (cs.position === "absolute" || cs.position === "fixed") && cs.pointerEvents === "none";
+    if (big || composerArea || pinnedBar || fx || decor) clearSurface(el, cs);
   }
 
   applyGlass(vw);
