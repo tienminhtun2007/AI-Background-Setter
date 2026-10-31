@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  body { width: 280px; margin: 0; padding: 14px; font: 13px system-ui, sans-serif; color: #222; background: #fafafa; }
+  header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  h1 { font-size: 15px; margin: 0; }
+  .lang { display: flex; border: 1px solid #ccc; border-radius: 6px; overflow: hidden; }
+  .lang button { flex: none; padding: 3px 8px; border-radius: 0; background: transparent; color: #666; font-size: 11px; }
+  .lang button.on { background: #d97757; color: #fff; }
+  .preview { height: 120px; border-radius: 8px; background: #e5e5e5 center/cover no-repeat;
+             display: flex; align-items: center; justify-content: center; color: #888; margin-bottom: 10px; }
+  .row { margin: 10px 0; }
+  label.title { display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 4px; }
+  .hint { font-size: 11px; color: #888; margin-top: 2px; }
+  input[type=range], select { width: 100%; }
+  .check label { display: block; margin: 3px 0; }
+  .btns { display: flex; gap: 6px; }
+  button { flex: 1; padding: 7px; border: 0; border-radius: 6px; cursor: pointer; font-weight: 600; }
+  #pick { background: #d97757; color: #fff; }
+  #clear { background: #ddd; }
+  #status { font-size: 11px; color: #888; margin-top: 6px; min-height: 14px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>🖼️ AI Background</h1>
+    <div class="lang">
+      <button data-lang="en">EN</button>
+      <button data-lang="vi">VI</button>
+    </div>
+  </header>
+
+  <div class="preview" id="preview"></div>
+
+  <div class="btns">
+    <button id="pick" data-i18n="pick"></button>
+    <button id="clear" data-i18n="clear"></button>
+  </div>
+  <input type="file" id="file" accept="image/*" hidden>
+  <div id="status"></div>
+
+  <div class="row">
+    <label class="title"><span data-i18n="glass"></span> <span id="glassVal"></span></label>
+    <input type="range" id="glass" min="0" max="1" step="0.05">
+    <div class="hint" data-i18n="glassHint"></div>
+  </div>
+
+  <div class="row">
+    <label class="title"><span data-i18n="dim"></span> <span id="dimVal"></span></label>
+    <input type="range" id="dim" min="0" max="0.9" step="0.05">
+    <div class="hint" data-i18n="dimHint"></div>
+  </div>
+
+  <div class="row">
+    <label class="title"><span data-i18n="blur"></span> <span id="blurVal"></span></label>
+    <input type="range" id="blur" min="0" max="20" step="1">
+  </div>
+
+  <div class="row">
+    <label class="title" data-i18n="fit"></label>
+    <select id="fit">
+      <option value="cover" data-i18n="fitCover"></option>
+      <option value="contain" data-i18n="fitContain"></option>
+      <option value="auto" data-i18n="fitAuto"></option>
+    </select>
+  </div>
+
+  <div class="row check">
+    <label class="title" data-i18n="enabledOn"></label>
+    <label><input type="checkbox" data-site="claude"> Claude</label>
+    <label><input type="checkbox" data-site="chatgpt"> ChatGPT</label>
+    <label><input type="checkbox" data-site="gemini"> Gemini</label>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
